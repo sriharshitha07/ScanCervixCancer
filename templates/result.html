@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Prediction Results{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Analysis Results</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-5 mb-4 mb-md-0">
+                            <h4>Uploaded Image</h4>
+                            <div class="image-container border p-2 rounded">
+                                <img src="data:image/jpeg;base64,{{ image_data }}" alt="Uploaded Image" class="img-fluid">
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <h4>Prediction</h4>
+                            <div class="result-box p-4 rounded">
+                                <div class="mb-4">
+                                    <h5>Classification:</h5>
+                                    <div class="result-classification 
+                                        {% if 'Normal' in prediction %}text-success
+                                        {% elif 'Light Dyplastic' in prediction or 'Moderate Dyplastic' in prediction or 'Severe Dyplastic' in prediction %}text-warning
+                                        {% else %}text-danger{% endif %}">
+                                        <i class="fas 
+                                            {% if 'Normal' in prediction %}fa-check-circle
+                                            {% elif 'Light Dyplastic' in prediction or 'Moderate Dyplastic' in prediction or 'Severe Dyplastic' in prediction %}fa-exclamation-triangle
+                                            {% else %}fa-times-circle{% endif %}
+                                            me-2"></i>
+                                        <span>{{ prediction }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="result-interpretation mt-4 p-3 bg-light rounded">
+                                    <h5><i class="fas fa-info-circle me-2"></i>Interpretation</h5>
+                                    {% if 'Normal' in prediction %}
+                                        <p>The analysis indicates normal cervical tissue ({{ prediction }}) with no signs of abnormalities.</p>
+                                    {% elif 'Light Dyplastic' in prediction or 'Moderate Dyplastic' in prediction or 'Severe Dyplastic' in prediction %}
+                                        <p>The analysis indicates dysplastic changes ({{ prediction }}) that may require further medical evaluation.</p>
+                                    {% else %}
+                                        <p>The analysis indicates carcinoma ({{ prediction }}). Immediate medical consultation is strongly recommended.</p>
+                                    {% endif %}
+                                    
+                                    <p class="mb-0 mt-2"><strong>Recommendation:</strong> 
+                                        {% if 'Normal' in prediction %}
+                                            Continue with regular cervical screening schedules.
+                                        {% else %}
+                                            Share these results with your healthcare provider immediately for further evaluation and appropriate action.
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 mt-4">
+                                <a href="/predict" class="btn btn-primary">
+                                    <i class="fas fa-upload me-2"></i>Analyze Another Image
+                                </a>
+                                <button onclick="window.print()" class="btn btn-outline-secondary">
+                                    <i class="fas fa-print me-2"></i>Print Results
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-white">
+                    <div class="disclaimer small text-center">
+                        <i class="fas fa-exclamation-circle me-1"></i>
+                        <strong>Medical Disclaimer:</strong> This is an AI-generated prediction and should not replace professional medical advice.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
