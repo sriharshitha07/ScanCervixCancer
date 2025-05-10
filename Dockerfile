@@ -1,0 +1,72 @@
+# Use an official Python runtime as a parent image
+FROM python:3.10-slim
+
+# Set environment variables for TensorFlow
+ENV TENSORFLOW_VERSION=2.19.0
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the current directory contents into the container at /app
+COPY . .
+
+# Install system dependencies (e.g., to build TensorFlow or other packages)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    libclang-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --no-cache-dir \
+    absl-py==2.2.2 \
+    astunparse==1.6.3 \
+    blinker==1.9.0 \
+    certifi==2025.4.26 \
+    charset-normalizer==3.4.2 \
+    click==8.1.8 \
+    colorama==0.4.6 \
+    Flask==3.1.0 \
+    flatbuffers==25.2.10 \
+    gast==0.6.0 \
+    google-pasta==0.2.0 \
+    grpcio==1.71.0 \
+    h5py==3.13.0 \
+    idna==3.10 \
+    itsdangerous==2.2.0 \
+    Jinja2==3.1.6 \
+    keras==3.9.2 \
+    libclang==18.1.1 \
+    Markdown==3.8 \
+    markdown-it-py==3.0.0 \
+    MarkupSafe==3.0.2 \
+    mdurl==0.1.2 \
+    ml_dtypes==0.5.1 \
+    namex==0.0.9 \
+    numpy==2.1.3 \
+    opt_einsum==3.4.0 \
+    optree==0.15.0 \
+    packaging==25.0 \
+    pillow==11.2.1 \
+    protobuf==5.29.4 \
+    Pygments==2.19.1 \
+    requests==2.32.3 \
+    rich==14.0.0 \
+    six==1.17.0 \
+    tensorboard==2.19.0 \
+    tensorboard-data-server==0.7.2 \
+    tensorflow==2.19.0 \
+    tensorflow-io-gcs-filesystem==0.31.0 \
+    termcolor==3.1.0 \
+    typing_extensions==4.13.2 \
+    urllib3==2.4.0 \
+    Werkzeug==3.1.3 \
+    wrapt==1.17.2 \
+    gdown
+
+# Expose the port the app runs on (for Flask)
+EXPOSE 5000
+
+# Command to run the app (replace with the command to run your app)
+CMD ["flask", "run", "--host=0.0.0.0"]
